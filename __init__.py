@@ -31,7 +31,7 @@ bl_info = {
     "name": "Code Editor",
     "location": "Text Editor > Right Click Menu",
     "version": (0, 1, 1),
-    "blender": (2, 82, 0),
+    "blender": (3, 3, 0),
     "description": "Better editor for coding",
     "author": "Jerryno, tintwotin, kaio",
     "category": "Text Editor",
@@ -1307,6 +1307,7 @@ classes = (
 )
 
 
+
 def register():
     from bpy.types import Screen, TEXT_HT_header
     from bpy.utils import register_class
@@ -1319,12 +1320,28 @@ def register():
 
     kc = bpy.context.window_manager.keyconfigs.addon.keymaps
 
+    def check_blender_version(debug=False):
+        result=False
+        version = bpy.app.version
+        if version[0] == 3 and version[1] > 2:
+            result=True
+
+        if debug == True:
+            print("###Version Result",version,result)
+            
+        return result
+
+    result = check_blender_version()
+
+    # if result == True:
     km = kc.get('Text', kc.new('Text', space_type='TEXT_EDITOR'))
+    # else:   
+    #     km = kc.get('Text Generic', kc.new('Text Generic', space_type='TEXT_EDITOR'))
 
     new = km.keymap_items.new
     
-    kmi1 = new('ce.mouse_move', 'MOUSEMOVE', 'ANY',head=True)
-    kmi2 = new('ce.cursor_set', 'LEFTMOUSE', 'PRESS',  head=True)
+    kmi1 = new('ce.mouse_move', 'MOUSEMOVE', 'ANY', ctrl=not result,head=True)
+    kmi2 = new('ce.cursor_set', 'LEFTMOUSE', 'PRESS', ctrl=not result, head=True)
     register.keymaps = ((km, kmi1), (km, kmi2))
     set_draw(getattr(bpy, "context"))
 
