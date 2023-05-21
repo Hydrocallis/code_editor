@@ -933,6 +933,7 @@ class CE_OT_cursor_set(CodeEditorBase, Operator):
 
     def modal(self, context, event):
         if event.value == 'RELEASE':
+
             return {'CANCELLED'}
         return {'RUNNING_MODAL'}
 
@@ -946,7 +947,9 @@ class CE_OT_cursor_set(CodeEditorBase, Operator):
             elif ce.hover_text and ce.hover_text in bpy.data.texts:
                 context.space_data.text = bpy.data.texts.get(ce.hover_text)
                 context.window_manager.modal_handler_add(self)
+        
                 return {'RUNNING_MODAL'}
+        bpy.ops.text.selection_set('INVOKE_DEFAULT')
         return {'PASS_THROUGH'}
 
 
@@ -1320,8 +1323,8 @@ def register():
 
     new = km.keymap_items.new
     
-    kmi1 = new('ce.mouse_move', 'MOUSEMOVE', 'ANY', ctrl=True,head=True)
-    kmi2 = new('ce.cursor_set', 'LEFTMOUSE', 'PRESS', ctrl=True, head=True)
+    kmi1 = new('ce.mouse_move', 'MOUSEMOVE', 'ANY',head=True)
+    kmi2 = new('ce.cursor_set', 'LEFTMOUSE', 'PRESS',  head=True)
     register.keymaps = ((km, kmi1), (km, kmi2))
     set_draw(getattr(bpy, "context"))
 
