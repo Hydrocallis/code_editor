@@ -1316,7 +1316,6 @@ def register():
 
     kc = bpy.context.window_manager.keyconfigs.addon.keymaps
 
-
     km = kc.get('Text', kc.new('Text', space_type='TEXT_EDITOR'))
 
     new = km.keymap_items.new
